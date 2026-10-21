@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+
 	"github.com/thunder-id/thunderid/internal/entity"
 	"github.com/thunder-id/thunderid/internal/entitytype"
 	"github.com/thunder-id/thunderid/internal/group"
@@ -22,6 +24,7 @@ import (
 // Initialize initializes the role service and registers its routes.
 func Initialize(
 	mux *http.ServeMux,
+	mcpServer *mcp.Server,
 	entityService entity.EntityServiceInterface,
 	groupService group.GroupServiceInterface,
 	ouService oupkg.OrganizationUnitServiceInterface,
@@ -56,6 +59,11 @@ func Initialize(
 	)
 	roleHandler := newRoleHandler(roleService, assignmentService)
 	registerRoutes(mux, roleHandler)
+
+	if mcpServer != nil {
+		registerMCPTools(mcpServer, roleService, assignmentService)
+	}
+
 	exporter := newRoleExporter(roleService, assignmentService)
 	ouRoleResolver := newOURoleResolver(roleStore)
 	return roleService, assignmentService, ouRoleResolver, exporter, nil
