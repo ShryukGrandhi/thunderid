@@ -225,7 +225,7 @@ func registerServices(mux *http.ServeMux, cacheManager cache.CacheManagerInterfa
 
 	httpConnectionService := httpconnection.Initialize()
 
-	resourceService, resourceExporter, err := resource.Initialize(mux, ouService, authZENPDPService, nil)
+	resourceService, resourceExporter, err := resource.Initialize(mux, mcpServer, ouService, authZENPDPService, nil)
 	fatalOnError(ctx, logger, err, "Failed to initialize Resource Service")
 	exporters = append(exporters, resourceExporter)
 

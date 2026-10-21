@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+
 	"github.com/thunder-id/thunderid/internal/connection/authzenpdp"
 	oupkg "github.com/thunder-id/thunderid/internal/ou"
 	serverconst "github.com/thunder-id/thunderid/internal/system/constants"
@@ -22,6 +24,7 @@ import (
 // changes, so the values the resource server's export refers to are kept where a reference finds them.
 func Initialize(
 	mux *http.ServeMux,
+	mcpServer *mcp.Server,
 	ouService oupkg.OrganizationUnitServiceInterface,
 	authZENPDPService authzenpdp.AuthZENPDPServiceInterface,
 	valueCapturer declarativeresource.ValueCapturer,
@@ -51,6 +54,10 @@ func Initialize(
 
 	resourceHandler := newResourceHandler(resourceService)
 	registerRoutes(mux, resourceHandler)
+
+	if mcpServer != nil {
+		registerMCPTools(mcpServer, resourceService)
+	}
 
 	return resourceService, exporter, nil
 }

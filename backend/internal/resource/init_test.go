@@ -76,7 +76,7 @@ func (suite *InitTestSuite) TestInitialize() {
 	mux := http.NewServeMux()
 
 	// Execute
-	service, exporter, err := Initialize(mux, suite.mockOUService, nil, nil)
+	service, exporter, err := Initialize(mux, nil, suite.mockOUService, nil, nil)
 
 	// Assert
 	suite.NoError(err)
@@ -375,7 +375,7 @@ func (suite *InitTestSuite) TestInitialize_IntegrationFlow() {
 	mux := http.NewServeMux()
 
 	// Execute
-	service, _, err := Initialize(mux, suite.mockOUService, nil, nil)
+	service, _, err := Initialize(mux, nil, suite.mockOUService, nil, nil)
 
 	// Assert service is created
 	suite.NoError(err)
