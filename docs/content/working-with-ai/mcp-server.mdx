@@ -212,8 +212,29 @@ After connecting, ask your agent to use the <ProductName /> MCP server for tasks
 | `flows` | Design and modify authentication and registration flows |
 | `themes` | Browse and inspect login page themes, colors, and typography |
 | `organization_units` | List organization units |
+| `resource_servers` | List, create, update, and delete resource servers, including MCP servers and APIs |
 | `user_types` | List user types and self-registration settings |
 | `react_sdk` | Get tailored integration code for the <ProductName /> React SDK |
+
+### Resource Server Tools
+
+The `resource_servers` toolset manages [resource servers](../../guides/resource-servers), the APIs and MCP servers that <ProductName /> protects.
+
+| Tool | Inputs |
+|------|--------|
+| `thunderid_list_resource_servers` | `limit` (1 to 100, default 30), `offset` (default 0) |
+| `thunderid_get_resource_server` | `id` |
+| `thunderid_create_resource_server` | `name`, `identifier`, `ouId` (required); `description`, `type` (`API`, `MCP`, or `CUSTOM`, default `CUSTOM`), `delimiter` (optional) |
+| `thunderid_update_resource_server` | `id`, `name`, `ouId` (required); `description`, `identifier`, `authorizationEngine` (optional) |
+| `thunderid_delete_resource_server` | `id` |
+
+The `identifier` is typically the audience URI of the resource server. For an MCP server, use the server URL. The `delimiter` is a single character that joins resource and action handles into permission strings. When omitted, the server's configured delimiter applies.
+
+`thunderid_update_resource_server` performs a full replacement. Any field you omit resets to its empty or default value, so retrieve the current state with `thunderid_get_resource_server` first and send back the complete object. Omitting `authorizationEngine` resets it to the default role-based engine.
+
+The `type` and `delimiter` fields are immutable. Set them when you create the resource server, because the update tool does not accept them.
+
+`thunderid_delete_resource_server` fails while the resource server still has resources or actions. Delete those first.
 
 **Example prompts:**
 
